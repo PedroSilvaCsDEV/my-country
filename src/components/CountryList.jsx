@@ -6,52 +6,49 @@ const CountryList = () => {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [visibleCountries, setVisibleCountries] = useState([]);
-  const [page, setPage] = useState(0); // Página inicial
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     const fetchCountries = async () => {
       const response = await fetch('https://restcountries.com/v3.1/all');
       const data = await response.json();
 
-      // Ordenar países por nome em ordem crescente
       const sortedCountries = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
 
       setCountries(sortedCountries);
       setFilteredCountries(sortedCountries);
-      setVisibleCountries(sortedCountries.slice(0, 12)); // Exibe os primeiros 20 países
+      setVisibleCountries(sortedCountries.slice(0, 12));
     };
 
     fetchCountries();
   }, []);
 
-  // Função para carregar mais países
   const loadMoreCountries = useCallback(() => {
     setVisibleCountries((prevVisible) => {
-      const nextPage = page + 1; // Incrementa a página
-      const nextCountries = filteredCountries.slice(nextPage * 12, (nextPage + 1) * 12); // Carrega mais 20 países
+      const nextPage = page + 1;
+      const nextCountries = filteredCountries.slice(nextPage * 12, (nextPage + 1) * 12);
       if (nextCountries.length > 0) {
-        setPage(nextPage); // Atualiza a página se houver mais países
-        return [...prevVisible, ...nextCountries]; // Retorna os países visíveis atualizados
+        setPage(nextPage);
+        return [...prevVisible, ...nextCountries];
       }     
-      return prevVisible; // Retorna os visíveis se não houver mais países
+      return prevVisible;
     });
   }, [page, filteredCountries]);
 
   const handleScroll = useCallback(() => {
-    const scrollY = window.scrollY; // Posição vertical da rolagem
-    const windowHeight = window.innerHeight; // Altura da janela
-    const documentHeight = document.documentElement.scrollHeight; // Altura total do documento
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
 
-    // Verifica se o usuário está perto do final da página
     if (scrollY + windowHeight >= documentHeight - 100) {
-      loadMoreCountries(); // Carrega mais países
+      loadMoreCountries();
     }
   }, [loadMoreCountries]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll); // Limpa o listener ao desmontar o componente
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [handleScroll]);
 

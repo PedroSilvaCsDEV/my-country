@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 
-// Dados das regiões e sub-regiões
 const regionsData = {
   Africa: ['Northern Africa', 'Western Africa', 'Eastern Africa', 'Southern Africa', 'Central Africa'],
   Americas: ['North America', 'Central America', 'South America', 'Caribbean'],
   Asia: ['Eastern Asia', 'South-Eastern Asia', 'Southern Asia', 'Central Asia', 'Western Asia'],
   Europe: ['Northern Europe', 'Western Europe', 'Southern Europe', 'Eastern Europe', 'Central Europe'],
   Oceania: ['Australia and New Zealand', 'Melanesia', 'Micronesia', 'Polynesia'],
-  Antarctic: [], // Antártica sem sub-regiões
+  Antarctic: [],
 };
 
-// Mapeamento de tradução
 const translationMap = {
   Africa: 'África',
   Americas: 'Américas',
@@ -48,8 +46,8 @@ const CountryFilters = ({ countries, setFilteredCountries }) => {
   const [region, setRegion] = useState('All');
   const [subRegion, setSubRegion] = useState('All');
   const [populationRange, setPopulationRange] = useState('All');
-  const [sortOrder, setSortOrder] = useState('name'); // Novo estado para ordenação
-  const [sortDirection, setSortDirection] = useState('asc'); // Novo estado para direção da ordenação
+  const [sortOrder, setSortOrder] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -58,7 +56,7 @@ const CountryFilters = ({ countries, setFilteredCountries }) => {
 
   const handleRegionChange = (e) => {
     setRegion(e.target.value);
-    setSubRegion('All'); // Reseta sub-região ao trocar a região
+    setSubRegion('All');
     filterCountries(searchTerm, e.target.value, 'All', populationRange, sortOrder, sortDirection);
   };
 
@@ -106,7 +104,6 @@ const CountryFilters = ({ countries, setFilteredCountries }) => {
       });
     }
 
-    // Ordenação
     filtered.sort((a, b) => {
       if (sort === 'name') {
         return direction === 'asc'
@@ -121,7 +118,7 @@ const CountryFilters = ({ countries, setFilteredCountries }) => {
           ? a.area - b.area
           : b.area - a.area;
       }
-      return 0; // Retorna 0 se não houver necessidade de ordenação
+      return 0;
     });
 
     setFilteredCountries(filtered);
@@ -144,11 +141,19 @@ const CountryFilters = ({ countries, setFilteredCountries }) => {
       </select>
       <select value={subRegion} onChange={handleSubRegionChange} className="w-full md:w-auto mt-2 md:mt-0 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="All">Todas as Sub-regiões</option>
-        {/* ... (options remain the same) */}
+        {region === 'All' && Object.keys(regionsData).flatMap(region => regionsData[region]).map(subReg => (
+          <option key={subReg} value={subReg}>{translationMap[subReg]}</option>
+        ))}
+        {region !== 'All' && regionsData[region].map(subReg => (
+          <option key={subReg} value={subReg}>{translationMap[subReg]}</option>
+        ))}
       </select>
       <select value={populationRange} onChange={handlePopulationChange} className="w-full md:w-auto mt-2 md:mt-0 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="All">Todas as Populações</option>
-        {/* ... (options remain the same) */}
+        <option value="<1M">&lt; 1M</option>
+        <option value="1M-10M">1M - 10M</option>
+        <option value="10M-100M">10M - 100M</option>
+        <option value=">100M">&gt; 100M</option>
       </select>
       <select value={sortOrder} onChange={handleSortOrderChange} className="w-full md:w-auto mt-2 md:mt-0 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="name">Ordenar por Nome</option>

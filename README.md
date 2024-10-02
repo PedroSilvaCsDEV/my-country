@@ -91,7 +91,7 @@ A aplicação está hospedada no Vercel e pode ser acessada através do seguinte
 ### 1. Clone o Repositório
 
 ```
-git clone https://github.com/seu-usuario/my-country.git
+git clone https://github.com/PedroSilvaCsDEV/my-country.git
 ```
 
 ### 2. Instale as Dependências

@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f3f4f6; /* Cor de fundo neutra */
+}
+
+h1, h2 {
+  color: #333; /* Cor de texto neutra */
+}
+
+p {
+  color: #555; /* Texto com cor menos intensa */
+}

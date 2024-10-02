@@ -5,8 +5,9 @@ import CountryFilters from './CountryFilters';
 const CountryList = () => {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
-  const [visibleCountries, setVisibleCountries] = useState([]);
-  const [page, setPage] = useState(0);
+  const [displayedCountries, setDisplayedCountries] = useState([]);
+  const [page, setPage] = useState(1);
+  const countriesPerPage = 12;
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -17,59 +18,48 @@ const CountryList = () => {
 
       setCountries(sortedCountries);
       setFilteredCountries(sortedCountries);
-      setVisibleCountries(sortedCountries.slice(0, 12));
+      setDisplayedCountries(sortedCountries.slice(0, countriesPerPage));
     };
 
     fetchCountries();
   }, []);
 
   const loadMoreCountries = useCallback(() => {
-    setVisibleCountries((prevVisible) => {
-      const nextPage = page + 1;
-      const nextCountries = filteredCountries.slice(nextPage * 12, (nextPage + 1) * 12);
-      if (nextCountries.length > 0) {
-        setPage(nextPage);
-        return [...prevVisible, ...nextCountries];
-      }     
-      return prevVisible;
-    });
+    const nextPage = page + 1;
+    const startIndex = (nextPage - 1) * countriesPerPage;
+    const newCountries = filteredCountries.slice(startIndex, startIndex + countriesPerPage);
+
+    if (newCountries.length > 0) {
+      setDisplayedCountries(prevCountries => [...prevCountries, ...newCountries]);
+      setPage(nextPage);
+    }
   }, [page, filteredCountries]);
 
-  const handleScroll = useCallback(() => {
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loadMoreCountries();
+      }
+    };
 
-    if (scrollY + windowHeight >= documentHeight - 100) {
-      loadMoreCountries();
-    }
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [loadMoreCountries]);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
+    setPage(1);
+    setDisplayedCountries(filteredCountries.slice(0, countriesPerPage));
+  }, [filteredCountries]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-4">
       <CountryFilters countries={countries} setFilteredCountries={setFilteredCountries} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {visibleCountries.map(country => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {displayedCountries.map(country => (
           <CountryCard key={country.cca3} country={country} />
         ))}
       </div>
-      {visibleCountries.length < filteredCountries.length && (
-        <div className="text-center mt-8">
-          <button 
-            onClick={loadMoreCountries} 
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
-          >
-            Carregar Mais
-          </button>
-        </div>
-      )}
     </div>
   );
 };

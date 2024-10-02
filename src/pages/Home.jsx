@@ -9,7 +9,7 @@ const Home = () => {
           <h1 className="text-3xl font-bold text-gray-800">Explorador de Países</h1>
         </div>
       </header>
-      <main>
+      <main className='bg-grey'>
         <CountryList />
       </main>
     </div>

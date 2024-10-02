@@ -4,13 +4,13 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f3f4f6; /* Cor de fundo neutra */
+  background-color: #f3f4f6; 
 }
 
 h1, h2 {
-  color: #333; /* Cor de texto neutra */
+  color: #333; 
 }
 
 p {
-  color: #555; /* Texto com cor menos intensa */
+  color: #444;
 }

@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const CountryCard = ({ country }) => {
   return (
-    <div className="bg-white border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+    <div className="bg-grey border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
       <Link to={`/country/${country.cca3}`} className="block">
         <div className="aspect-w-3 aspect-h-2">
           <img
             src={country.flags.svg}
             alt={country.name.common}
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-48"
           />
         </div>
         <div className="p-4">

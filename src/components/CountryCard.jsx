@@ -12,7 +12,9 @@ const CountryCard = ({ country }) => {
         />
         <h2 className="text-lg font-bold">{country.name.common}</h2>
         <p>Capital: {country.capital}</p>
-        <p>Região: {country.region}</p> {/* Traduzido para "Região" */}
+        <p>Região: {country.region}</p>
+        <p>População: {country.population.toLocaleString()}</p> {/* Adicionando a população */}
+        <p>Área: {country.area.toLocaleString()} km²</p> {/* Adicionando a área */}
       </Link>
     </div>
   );

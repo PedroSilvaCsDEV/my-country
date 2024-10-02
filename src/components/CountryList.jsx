@@ -18,7 +18,7 @@ const CountryList = () => {
 
       setCountries(sortedCountries);
       setFilteredCountries(sortedCountries);
-      setVisibleCountries(sortedCountries.slice(0, 9)); // Exibe os primeiros 20 países
+      setVisibleCountries(sortedCountries.slice(0, 12)); // Exibe os primeiros 20 países
     };
 
     fetchCountries();
@@ -28,7 +28,7 @@ const CountryList = () => {
   const loadMoreCountries = useCallback(() => {
     setVisibleCountries((prevVisible) => {
       const nextPage = page + 1; // Incrementa a página
-      const nextCountries = filteredCountries.slice(nextPage * 9, (nextPage + 1) * 9); // Carrega mais 20 países
+      const nextCountries = filteredCountries.slice(nextPage * 12, (nextPage + 1) * 12); // Carrega mais 20 países
       if (nextCountries.length > 0) {
         setPage(nextPage); // Atualiza a página se houver mais países
         return [...prevVisible, ...nextCountries]; // Retorna os países visíveis atualizados

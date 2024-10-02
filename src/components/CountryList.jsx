@@ -32,7 +32,7 @@ const CountryList = () => {
       if (nextCountries.length > 0) {
         setPage(nextPage); // Atualiza a página se houver mais países
         return [...prevVisible, ...nextCountries]; // Retorna os países visíveis atualizados
-      }
+      }     
       return prevVisible; // Retorna os visíveis se não houver mais países
     });
   }, [page, filteredCountries]);
@@ -56,14 +56,23 @@ const CountryList = () => {
   }, [handleScroll]);
 
   return (
-    <div className="container mx-auto p-4">
-      {/* Renderizando o CountryFilters uma vez */}
+    <div className="container mx-auto px-4 py-8">
       <CountryFilters countries={countries} setFilteredCountries={setFilteredCountries} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {visibleCountries.map(country => (
           <CountryCard key={country.cca3} country={country} />
         ))}
       </div>
+      {visibleCountries.length < filteredCountries.length && (
+        <div className="text-center mt-8">
+          <button 
+            onClick={loadMoreCountries} 
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+          >
+            Carregar Mais
+          </button>
+        </div>
+      )}
     </div>
   );
 };
